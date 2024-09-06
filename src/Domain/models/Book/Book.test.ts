@@ -86,6 +86,7 @@ describe("Book", () => {
   });
 
   describe("increaseStock", () => {
+    // Bookクラスを通して、Stockクラスのメソッドが呼ばれていることを確認する
     it("stock.increaseQuantityが呼ばれる", () => {
       const book = Book.reconstruct(bookId, title, price, stock);
       const spy = jest.spyOn(stock, "increaseQuantity");
