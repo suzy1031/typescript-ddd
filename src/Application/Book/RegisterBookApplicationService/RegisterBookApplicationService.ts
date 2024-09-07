@@ -5,6 +5,7 @@ import { IBookRepository } from "Domain/models/Book/IBookRepository";
 import { Price } from "Domain/models/Book/Price/Price";
 import { Title } from "Domain/models/Book/Title/Title";
 import { ISBNDuplicationCheckDomainService } from "Domain/services/Book/ISBNDuplicationCheckDomainService/ISBNDuplicationCheckDomainService";
+import { inject, injectable } from "tsyringe";
 
 export type RegisterBookCommand = {
   isbn: string;
@@ -13,9 +14,12 @@ export type RegisterBookCommand = {
 };
 // ドメイン知識を持たない層
 // ドメインオブジェクトを利用するだけでユースケースを実現する
+@injectable()
 export class RegisterBookApplicationService {
   constructor(
+    @inject("IBookRepository")
     private bookRepository: IBookRepository,
+    @inject("ITransactionManager")
     private transactionManager: ITransactionManager
   ) {}
 

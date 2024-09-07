@@ -1,15 +1,19 @@
 import { ITransactionManager } from "Application/shared/ITransactionManager";
 import { BookId } from "Domain/models/Book/BookId/BookId";
 import { IBookRepository } from "Domain/models/Book/IBookRepository";
+import { inject, injectable } from "tsyringe";
 
 export type IncreaseBookStockCommand = {
   bookId: string;
   incrementAmount: number;
 };
 
+@injectable()
 export class IncreaseBookStockApplicationService {
   constructor(
+    @inject("IBookRepository")
     private bookRepository: IBookRepository,
+    @inject("ITransactionManager")
     private transactionManage: ITransactionManager
   ) {}
 
@@ -26,7 +30,7 @@ export class IncreaseBookStockApplicationService {
       // ドメインオブジェクトを利用してユースケースを安全に実現する
       book.increaseStock(command.incrementAmount);
 
-      await this, this.bookRepository.update(book);
+      await this.bookRepository.update(book);
     });
   }
 }

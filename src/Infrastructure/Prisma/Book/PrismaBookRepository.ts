@@ -9,9 +9,14 @@ import { Stock } from "Domain/models/Book/Stock/Stock";
 import { StockId } from "Domain/models/Book/Stock/StockId/StockId";
 import { Title } from "Domain/models/Book/Title/Title";
 import { PrismaClientManager } from "../PrismaClientManager";
+import { inject, injectable } from "tsyringe";
 
+@injectable()
 export class PrismaBookRepository implements IBookRepository {
-  constructor(private clientManger: PrismaClientManager) {}
+  constructor(
+    @inject("IDataAccessClientManager")
+    private clientManger: PrismaClientManager
+  ) {}
 
   private statusDataMapper(
     status: StatusEnum

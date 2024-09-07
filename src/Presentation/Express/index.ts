@@ -2,10 +2,10 @@ import {
   RegisterBookApplicationService,
   RegisterBookCommand,
 } from "Application/Book/RegisterBookApplicationService/RegisterBookApplicationService";
-import express from "express";
-import { PrismaBookRepository } from "Infrastructure/Prisma/Book/PrismaBookRepository";
-import { PrismaClientManager } from "Infrastructure/Prisma/PrismaClientManager";
-import { PrismaTransactionManager } from "Infrastructure/Prisma/PrismaTransactionManager";
+import express, { json } from "express";
+import "reflect-metadata";
+import "../../Program";
+import { container } from "tsyringe";
 
 const app = express();
 const port = 3000;
@@ -18,7 +18,7 @@ app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
 
-app.use(express.json());
+app.use(json());
 app.post("/book", async (req, res) => {
   try {
     const requestBody = req.body as {
@@ -27,12 +27,17 @@ app.post("/book", async (req, res) => {
       priceAmount: number;
     };
 
-    const clientManager = new PrismaClientManager();
-    const transactionManager = new PrismaTransactionManager(clientManager);
-    const bookRepository = new PrismaBookRepository(clientManager);
-    const registerBookApplicationService = new RegisterBookApplicationService(
-      bookRepository,
-      transactionManager
+    // const clientManager = new PrismaClientManager();
+    // const transactionManager = new PrismaTransactionManager(clientManager);
+    // const bookRepository = new PrismaBookRepository(clientManager);
+    // const registerBookApplicationService = new RegisterBookApplicationService(
+    //   bookRepository,
+    //   transactionManager
+    // );
+
+    // 依存オブジェクトのインスタンス化と依存関係の解決を行うコードをProgram.tsに集約
+    const registerBookApplicationService = container.resolve(
+      RegisterBookApplicationService
     );
 
     const registerBookCommand: RegisterBookCommand = requestBody;
