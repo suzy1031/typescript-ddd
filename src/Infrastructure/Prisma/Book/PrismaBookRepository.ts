@@ -11,6 +11,11 @@ import { Title } from "Domain/models/Book/Title/Title";
 import { PrismaClientManager } from "../PrismaClientManager";
 import { inject, injectable } from "tsyringe";
 
+// classが特定のインターフェイスを実装する= IBookRepository
+// クラスがインターフェイスで定義されたプロパティやメソッドを持つことを強制する= save / update / delete / find
+// IBookRepositoryのメソッドの実態は、prismaのメソッドを呼び出す
+// prismaは直接定義されていないが、clientManagerを通じてprismaのメソッドを呼び出す
+// ref: https://zenn.dev/lyio/articles/fab176ca55d415
 @injectable()
 export class PrismaBookRepository implements IBookRepository {
   constructor(
@@ -43,8 +48,10 @@ export class PrismaBookRepository implements IBookRepository {
   }
 
   async save(book: Book) {
+    // client -> prisma
     const client = this.clientManger.getClient();
 
+    // prisma.book.create
     await client.book.create({
       data: {
         bookId: book.bookId.value,

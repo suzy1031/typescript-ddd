@@ -3,6 +3,7 @@ import { PrismaClientManager } from "./PrismaClientManager";
 import prisma from "./prismaClient";
 import { inject, injectable } from "tsyringe";
 
+// 高レベルのモジュールから呼び出している抽象化されたITransactionManagerの実態はこのクラス
 @injectable()
 export class PrismaTransactionManager implements ITransactionManager {
   constructor(

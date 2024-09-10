@@ -33,12 +33,16 @@ export class RegisterBookApplicationService {
         throw new Error("既に存在する書籍です");
       }
 
+      // 引数は直接渡さない
+      // バリューオブジェクト（インスタンス）を生成して渡す
       const book = Book.create(
         new BookId(command.isbn),
         new Title(command.title),
         new Price({ amount: command.priceAmount, currency: "JPY" })
       );
 
+      // インターフェイス（抽象）を利用してsaveメソッドを実行
+      // 実態はprisma.book.createを操作してdbに保存する
       await this.bookRepository.save(book);
     });
   }
